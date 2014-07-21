@@ -4,6 +4,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.view.View.OnClickListener;
 
 public class AutenticaActivity extends ActionBarActivity {
 
@@ -11,7 +14,26 @@ public class AutenticaActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sign_in_screen);
-
+		Button btn = (Button) findViewById(R.id.btnSingIn);
+		btn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				boolean autenticado = login();
+				
+				if(autenticado == true) //ele se autenticou
+				{
+					//TODO
+				}
+				
+			}
+		});
+		
+	}
+	
+	public boolean login()
+	{
+		return false;
 	}
 
 	@Override

@@ -47,12 +47,14 @@ public class ManagerActivity extends Activity {
 	public static final int RECIEVE_MESSAGE = 1;
 
 	Handler h;
+	PlaceholderFragment mFragment = null;
 	
 	private BluetoothAdapter btAdapter = null;
 	private BluetoothSocket btSocket = null;
 	private StringBuilder sb = new StringBuilder();
 	
 	private ConnectedThread mConnectedThread;
+	
 
 	// SPP UUID service
 	private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
@@ -79,6 +81,9 @@ public class ManagerActivity extends Activity {
 						String sbprint = sb.substring(0, endOfLineIndex);               // extract string
 						sb.delete(0, sb.length());                                      // and clear
 						Log.d("HUE","Data from Arduino: " + sbprint); // debug text
+						mFragment = (PlaceholderFragment) getFragmentManager().findFragmentById(R.id.container);
+						mFragment.actionInShelf(sbprint);
+						
 
 					}
 					//Log.d(TAG, "...String:"+ sb.toString() +  "Byte:" + msg.arg1 + "...");
@@ -94,6 +99,9 @@ public class ManagerActivity extends Activity {
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
+		
+		
+		
 	}
 	
 	private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
@@ -243,32 +251,37 @@ public class ManagerActivity extends Activity {
 	 * A placeholder fragment containing a simple view.
 	 */
 	public static class PlaceholderFragment extends Fragment implements OnItemClickListener {
+		private static final int LOGIN_RESULT = 20620; //pastor cleiton collins
 		AdapterListView adapterListView;
+		ListView lv;
 		public PlaceholderFragment() {
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_manager,
-					container, false);
-			ListView lv = (ListView) rootView.findViewById(R.id.listView1);
-			adapterListView = criaAdapter();
-			lv.setAdapter(adapterListView);
-			lv.setOnItemClickListener(this);
-			return rootView;
-		}
-
-		public void onItemClick(AdapterView<?> arg0, View view, int position, long arg3) {
-			//on item click
-			ItemListView livro = adapterListView.getItem(position);
-			chamaAutenticacao(livro);			
+			
 		}
 		
+		
+
+		public void actionInShelf(String rawBTData) {
+			char posicao;
+			char acao;
+			
+			posicao = rawBTData.charAt(0);
+			acao = rawBTData.charAt(1);
+			
+			updateList(posicao,acao);
+			
+		}
+
+
+
+		private void updateList(char posicao, char acao) {
+			
+			
+		}
+
 		public void chamaAutenticacao(ItemListView livro) {
 			Intent it = new Intent(this.getActivity(), AutenticaActivity.class);
 			it.putExtra("titulo", livro.getTexto());
-			startActivity(it);
+			startActivityForResult(it, LOGIN_RESULT);
 		}
 		
 		private AdapterListView criaAdapter(){
@@ -283,6 +296,41 @@ public class ManagerActivity extends Activity {
 			return new AdapterListView(this.getActivity(),itens); 
 			
 		}
+
+
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			View rootView = inflater.inflate(R.layout.fragment_manager,
+					container, false);
+			lv = (ListView) rootView.findViewById(R.id.listView1);
+			adapterListView = criaAdapter();
+			lv.setAdapter(adapterListView);
+			lv.setOnItemClickListener(this);
+			return rootView;
+		}
+
+		public void onItemClick(AdapterView<?> arg0, View view, int position, long arg3) {
+			//on item click
+			ItemListView livro = adapterListView.getItem(position);
+			chamaAutenticacao(livro);			
+		}
+		
+		@Override
+		public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		    if (requestCode == LOGIN_RESULT) {
+		        if(resultCode == RESULT_OK){
+		            String result=data.getStringExtra("result");
+		            //mudar listView
+		        }
+		        if (resultCode == RESULT_CANCELED) {
+		           //não mudar list view, talvez dar um aviso...
+		        }
+		    }
+		}//onActivityResult
+		
+		
 		
 		
 	}
