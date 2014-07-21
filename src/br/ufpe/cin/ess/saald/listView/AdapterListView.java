@@ -45,6 +45,11 @@ public class AdapterListView extends BaseAdapter {
     public ItemListView getItem(int position) {
         return itens.get(position);
     }
+    
+    public void removeItem(int position)
+    {
+    	itens.remove(position);
+    }
 
     /**
      * Sem implementação

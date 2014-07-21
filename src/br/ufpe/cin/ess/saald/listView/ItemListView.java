@@ -9,14 +9,14 @@ import android.graphics.drawable.Drawable;
  *
  */
 public class ItemListView {
-
+	int id;
     private String texto;
     //private MjolnirImg icone;
     private Drawable icone;
-    public ItemListView(String texto, Drawable iconeDrawable) {
+    public ItemListView(int id_livro ,String texto, Drawable iconeDrawable) {
         this.texto = texto;
         //this.icone = new MjolnirImg(iconeBytes);
-
+        id = id_livro;
         this.icone = iconeDrawable;
 
         
@@ -35,6 +35,11 @@ public class ItemListView {
     {
     	return icone;
     }
+
+	public int getId() {
+		// TODO Auto-generated method stub
+		return id;
+	}
 
 }
 	

@@ -1,6 +1,7 @@
 package br.ufpe.cin.ess.saald;
 
 import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,7 +24,10 @@ public class AutenticaActivity extends ActionBarActivity {
 				
 				if(autenticado == true) //ele se autenticou
 				{
-					//TODO
+					Intent it = new Intent();
+					it.putExtra("result", getIntent().getIntExtra("id", -1));
+					setResult(RESULT_OK, it);
+					finish();
 				}
 				
 			}
@@ -33,7 +37,7 @@ public class AutenticaActivity extends ActionBarActivity {
 	
 	public boolean login()
 	{
-		return false;
+		return true;
 	}
 
 	@Override

@@ -61,7 +61,8 @@ public class ManagerActivity extends Activity {
 	private static final String TAG = "HUE";
 
 	// MAC-address of Bluetooth module
-	private static String address = "20:14:03:24:10:57"; //meu adaptador HC-06
+	//private static String address = "20:14:03:24:10:57"; //meu adaptador HC-06
+	private static String address = "20:14:03:24:50:43"; //Rafis' adaptador HC-05
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +77,10 @@ public class ManagerActivity extends Activity {
 					byte[] readBuf = (byte[]) msg.obj;
 					String strIncom = new String(readBuf, 0, msg.arg1);                 // create string from bytes array
 					sb.append(strIncom);                                                // append string
-					int endOfLineIndex = sb.indexOf("\n");                            // determine the end-of-line
+					int endOfLineIndex = sb.indexOf("\n");
+					Log.i("HUE","buffer = "+strIncom);// determine the end-of-line
 					if (endOfLineIndex > 0) {                                            // if end-of-line,
+						
 						String sbprint = sb.substring(0, endOfLineIndex);               // extract string
 						sb.delete(0, sb.length());                                      // and clear
 						Log.d("HUE","Data from Arduino: " + sbprint); // debug text
@@ -253,6 +256,7 @@ public class ManagerActivity extends Activity {
 	public static class PlaceholderFragment extends Fragment implements OnItemClickListener {
 		private static final int LOGIN_RESULT = 20620; //pastor cleiton collins
 		AdapterListView adapterListView;
+		ArrayList<ItemListView> itens;
 		ListView lv;
 		public PlaceholderFragment() {
 			
@@ -261,10 +265,10 @@ public class ManagerActivity extends Activity {
 		
 
 		public void actionInShelf(String rawBTData) {
-			char posicao;
+			int posicao;
 			char acao;
 			
-			posicao = rawBTData.charAt(0);
+			posicao = rawBTData.charAt(0) -'0';
 			acao = rawBTData.charAt(1);
 			
 			updateList(posicao,acao);
@@ -273,26 +277,44 @@ public class ManagerActivity extends Activity {
 
 
 
-		private void updateList(char posicao, char acao) {
+		private void updateList(int posicao, char acao) {
 			
+			boolean desistiu = false;
+			for(int i = 0;i<adapterListView.getCount();i++){
+				if(adapterListView.getItem(i).getId()==posicao)
+				{
+					desistiu = true;
+					adapterListView.removeItem(i);
+					adapterListView.notifyDataSetChanged();
+				}
+			}
+			
+			if(!desistiu)
+			{
+				ItemListView livro = new ItemListView(posicao,TITULO_LIVRO[posicao],getResources().getDrawable(R.drawable.book));
+				itens.add(livro);
+				adapterListView.notifyDataSetChanged();
+			}
 			
 		}
 
-		public void chamaAutenticacao(ItemListView livro) {
+		public void chamaAutenticacao(ItemListView livro,int posicaoNaLista) {
 			Intent it = new Intent(this.getActivity(), AutenticaActivity.class);
 			it.putExtra("titulo", livro.getTexto());
+			int id = livro.getId();
+			it.putExtra("id", id);
 			startActivityForResult(it, LOGIN_RESULT);
 		}
 		
 		private AdapterListView criaAdapter(){
-			ArrayList<ItemListView> itens = new ArrayList<ItemListView>();
+			itens = new ArrayList<ItemListView>();
 			
-			for(int i = 0; i<QTD_LIVROS;i++)
-			{
-				ItemListView livro = new ItemListView(TITULO_LIVRO[i],getResources().getDrawable(R.drawable.book));
-				itens.add(livro);
-			}
-			
+//			for(int i = 0; i<QTD_LIVROS;i++)
+//			{
+//				ItemListView livro = new ItemListView(i,TITULO_LIVRO[i],getResources().getDrawable(R.drawable.book));
+//				itens.add(livro);
+//			}
+//			
 			return new AdapterListView(this.getActivity(),itens); 
 			
 		}
@@ -313,7 +335,8 @@ public class ManagerActivity extends Activity {
 		public void onItemClick(AdapterView<?> arg0, View view, int position, long arg3) {
 			//on item click
 			ItemListView livro = adapterListView.getItem(position);
-			chamaAutenticacao(livro);			
+			chamaAutenticacao(livro,position);
+			
 		}
 		
 		@Override
@@ -321,8 +344,18 @@ public class ManagerActivity extends Activity {
 
 		    if (requestCode == LOGIN_RESULT) {
 		        if(resultCode == RESULT_OK){
-		            String result=data.getStringExtra("result");
+		            int id=data.getIntExtra("result",-1);
 		            //mudar listView
+		            if(id!=-1){
+		            	int position;
+		            	
+		            	for(int i = 0;i<adapterListView.getCount();i++)
+		            		if(adapterListView.getItem(i).getId()==id)
+		            		{
+		            			adapterListView.removeItem(i);
+		            			adapterListView.notifyDataSetChanged();
+		            		}
+		            }
 		        }
 		        if (resultCode == RESULT_CANCELED) {
 		           //não mudar list view, talvez dar um aviso...
