@@ -1,5 +1,6 @@
 package br.ufpe.cin.ess.saald;
 
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -61,8 +62,8 @@ public class ManagerActivity extends Activity {
 	private static final String TAG = "HUE";
 
 	// MAC-address of Bluetooth module
-	//private static String address = "20:14:03:24:10:57"; //meu adaptador HC-06
-	private static String address = "20:14:03:24:50:43"; //Rafis' adaptador HC-05
+	private static String address = "20:14:03:24:10:57"; //meu adaptador HC-06
+	//private static String address = "20:14:03:24:50:43"; //Rafis' adaptador HC-05
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -237,13 +238,15 @@ public class ManagerActivity extends Activity {
         public void run() {
             byte[] buffer = new byte[256];  // buffer store for the stream
             int bytes; // bytes returned from read()
- 
+            DataInputStream mDinput=null;
             // Keep listening to the InputStream until an exception occurs
             while (true) {
                 try {
                     // Read from the InputStream
-                    bytes = mmInStream.read(buffer);        // Get number of bytes and message in "buffer"
-                    h.obtainMessage(RECIEVE_MESSAGE, bytes, -1, buffer).sendToTarget();     // Send to message queue Handler
+                    //bytes = mmInStream.read(buffer);        // Get number of bytes and message in "buffer"
+                	mDinput = new DataInputStream(mmInStream);
+                	mDinput.readFully(buffer, 0, 3);
+                    h.obtainMessage(RECIEVE_MESSAGE, 3, -1, buffer).sendToTarget();     // Send to message queue Handler
                 } catch (IOException e) {
                     break;
                 }
