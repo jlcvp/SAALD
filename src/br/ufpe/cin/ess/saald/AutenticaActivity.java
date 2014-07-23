@@ -37,6 +37,7 @@ public class AutenticaActivity extends ActionBarActivity {
 	
 	public boolean login()
 	{
+		//TODO implementar a comunicação WEB (usar asyncTask ou Thread pra não travar a UI e receber mensagem de aplicação não respondendo)
 		return true;
 	}
 
