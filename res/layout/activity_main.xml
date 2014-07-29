@@ -30,7 +30,7 @@
 	       	style="@style/DefaultButtonText"
 	       />
         <Button 
-	       	android:id="@+id/btnSingIn"
+	       	android:id="@+id/btnSingIndois"
 	       	android:layout_width="match_parent"
 	       	android:layout_height="wrap_content"
 	        android:padding="10dp"

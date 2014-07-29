@@ -33,7 +33,7 @@ import android.widget.Toast;
 public class ManagerActivity extends Activity {
 	
 
-	public static final int QTD_LIVROS = 3;
+	public static final int QTD_LIVROS = 6;
 	public static final String[] TITULO_LIVRO = {"O Guia do Mochileiro da Galáctea",
 												 "O Retorno de Dariru",
 												 "Galinha Pintadinha - Ultimato"}; //Preencher aqui com o 
@@ -56,8 +56,8 @@ public class ManagerActivity extends Activity {
 	private static final String TAG = "HUE";
 
 	// MAC-address of Bluetooth module
-	private static String address = "20:14:03:24:10:57"; //meu adaptador HC-06
-	//private static String address = "20:14:03:24:50:43"; //Rafis' adaptador HC-05
+	//private static String address = "20:14:03:24:10:57"; //meu adaptador HC-06
+	private static String address = "20:14:03:24:50:43"; //Rafis' adaptador HC-05
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
