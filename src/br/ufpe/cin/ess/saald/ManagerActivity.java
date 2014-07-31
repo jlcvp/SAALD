@@ -33,10 +33,11 @@ import android.widget.Toast;
 public class ManagerActivity extends Activity {
 	
 
-	public static final int QTD_LIVROS = 6;
+	public static final int QTD_LIVROS = 4;
 	public static final String[] TITULO_LIVRO = {"O Guia do Mochileiro da Galáctea",
 												 "O Retorno de Dariru",
-												 "Galinha Pintadinha - Ultimato"}; //Preencher aqui com o 
+												 "Galinha Pintadinha - Ultimato",
+												 "ELI BOOK"}; //Preencher aqui com o 
 																					//nome dos livros
 																					//(a ordem importa)	
 	public static final int RECIEVE_MESSAGE = 1;
@@ -330,12 +331,14 @@ public class ManagerActivity extends Activity {
 		private AdapterListView criaAdapter(){
 			itens = new ArrayList<ItemListView>(); //inicializa a lista vazia
 			
-//			for(int i = 0; i<QTD_LIVROS;i++)
-//			{
-//				ItemListView livro = new ItemListView(i,TITULO_LIVRO[i],getResources().getDrawable(R.drawable.book));
-//				itens.add(livro);
-//			}
-//			
+			//TODO comentar esse FOR para iniciar com a lista vazia (coloquei aqui pra poder testar sem precisar montar o circuito do arduino
+			
+			for(int i = 0; i<QTD_LIVROS;i++)
+			{
+				ItemListView livro = new ItemListView(i,TITULO_LIVRO[i],getResources().getDrawable(R.drawable.book));
+				itens.add(livro);
+			}
+			
 			return new AdapterListView(this.getActivity(),itens); 
 			
 		}
@@ -365,7 +368,7 @@ public class ManagerActivity extends Activity {
 
 		    if (requestCode == LOGIN_RESULT) {
 		        if(resultCode == RESULT_OK){
-		            int id=data.getIntExtra("result",-1);
+		            int id=data.getIntExtra("id",-1);
 		            //mudar listView
 		            if(id!=-1){
 		            	int position;
@@ -379,7 +382,7 @@ public class ManagerActivity extends Activity {
 		            }
 		        }
 		        if (resultCode == RESULT_CANCELED) {
-		           //não mudar list view, talvez dar um aviso...
+		           Toast.makeText(getActivity(), "Login sem sucesso", Toast.LENGTH_LONG).show();
 		        }
 		    }
 		}//onActivityResult

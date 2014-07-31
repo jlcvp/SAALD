@@ -21,11 +21,13 @@
             android:id="@+id/etUserName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="-2dp"
             android:background="@drawable/edittext_top_bg"
             android:drawableLeft="@drawable/email"
+            
             android:hint="Email"
-            android:layout_marginBottom="-2dp"
             android:padding="10dp"
+            android:textColor="#000000"
             android:textColorHint="#cccccc" />
 
         <EditText
@@ -36,8 +38,9 @@
             android:background="@drawable/edittext_bottom_bg"
             android:drawableLeft="@drawable/password"
             android:hint="Password"
-            android:padding="10dp"
             android:inputType="textPassword"
+            android:padding="10dp"
+            android:textColor="#000000"
             android:textColorHint="#cccccc" />
 
         <Button
@@ -50,6 +53,15 @@
             android:padding="10dp"
             android:text="Entrar"
             android:textColor="#EEEEEE" />
+
+        <TextView
+            android:id="@+id/tv_erro_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_horizontal"
+            android:text=""
+            android:textColor="#FF3333" />
 
     </LinearLayout>
 
